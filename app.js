@@ -1,18 +1,29 @@
 const http = require("http");
+const { readFileSync } = require("fs")
+
+const HomePage = readFileSync("./index.html")
 
 const server = http.createServer((req, res)=>{
-if(req.url ==="/"){
-    res.end("welcome to our home page")
-}
-if(req.url === "/about"){
-    res.end("here is all about us")
-}
-res.end(`
-     <h1>Ooops!!!</h1>
-     <p>The page you are trying to enter does not exist</p>
-     <a href="/">back to home page</a>
-    `)
-// res.write("welcome to our home page")
-// res.end()
+    const url = req.url;
+    //home page
+    if(url === "/"){
+        res.writeHead(200,{"content-type":"text/html"})
+        res.end(HomePage)
+    }
+    else if (url === "/home") {
+        res.writeHead(200,{"content-type":"text/html"})
+        res.end(HomePage)
+    }
+    //about page
+    else if (url === "/about") {
+        res.writeHead(200,{"content-type":"text/html"})
+        res.end("<h1>About page</h1>")
+    }//404
+    else{
+        res.writeHead(400,{"content-type":"text/html"})
+        res.end("<h1>page no found</h1>")
+    }
+    
 })
+
 server.listen(5000)
